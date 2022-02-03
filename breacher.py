@@ -12,6 +12,7 @@ parser = argparse.ArgumentParser() #defines the parser
 parser.add_argument("-u", help="target url", dest='target')
 parser.add_argument("-c", help="Concurrent threads to use", dest='threads', type=int, default=0)
 parser.add_argument("--paths", help="uses multithreading", dest='paths', default="paths.txt")
+parser.add_argument("-b", "--cookies", type=str, dest="cookies", help="Cookies to send with requets")
 args = parser.parse_args() #arguments to be parsed
 
 target = args.target #Gets tarfet from argument
@@ -19,7 +20,7 @@ target = args.target #Gets tarfet from argument
 def scan(links):
     for link in links: #fetches one link from the links list
         link = target + link.strip() # Does this--> example.com/admin/
-        r = requests.get(link, verify=False) #Requests to the combined url
+        r = requests.get(link, verify=False, headers={"Cookies":args.cookies}) #Requests to the combined url
         http = r.status_code #Fetches the http response code
         if http == 200: #if its 200 the url points to valid resource i.e. admin panel
                 print(link)
